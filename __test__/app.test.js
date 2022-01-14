@@ -16,20 +16,17 @@ describe("/api/treasures", () => {
           expect(result.body.Treasures).toHaveLength(26);
 
           result.body.Treasures.forEach((treasure) => {
-              expect(treasure).toEqual(expect.objectContaining({treasure_id: expect.any (Number),
-             treasure_name: expect.any(String),
-            colour:expect.any (String),age: expect.any(Number),cost_at_auction: expect.any  }))
-          })
+            expect(treasure).toEqual(
+              expect.objectContaining({
+                treasure_name: expect.any(String),
+                colour: expect.any(String),
+                age: expect.any(Number),
+                cost_at_auction: expect.any(String),
+                shop_id: expect.any(Number),
+              })
+            );
+          });
         });
     });
   });
 });
-
-
-{
-    treasure_name: 'treasure-e',
-    colour: 'onyx',
-    age: 10865,
-    cost_at_auction: '99999.99',
-    shop: 'shop-a',
-  },
