@@ -32,17 +32,22 @@ const seed = ({ shopData, treasureData }) => {
       );
       return db.query(shopQuery);
     })
-    .then(() => {
-      const treasureQuery = format(`INSERT INTO treasures (treasure_name, colour, age, cost_at_auction, shop_id) VALUES %L RETURNING *;`, treasureData.map((treasure) => [treasure.treasure_name, treasure.colour, treasure.age, treasure.cost_at_auction, treasure.shop_id]));
+    .then((result) => {
+      console.log(result.rows);
+      const shopReference = createShopsRef(result.rows);
+      console.log(shopReference, "shop ref");
+      const formatTreasureData = formatTreasureRef(treasureData, shopReference);
+
+      return formatTreasureData;
+    })
+    .then((formatTreasureData) => {
+      const treasureQuery = format(
+        `INSERT INTO treasures (treasure_name, colour, age, cost_at_auction, shop_id) VALUES %L RETURNING *;`,
+        formatTreasureData
+      );
       return db.query(treasureQuery);
     })
-    .then((result) => {
-      console.log(result.rows, 'result.rows');
-      const shopReference = createShopsRef(result.rows);
-      const formatTreasureData = formatTreasureRef(treasureData, shopReference);
-      console.log(shopReference, 'shopref');
-      console.log(formatTreasureData, 'format treasure data');
-    })
+    .then((result) => {});
 };
 
 module.exports = seed;
