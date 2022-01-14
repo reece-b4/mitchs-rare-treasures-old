@@ -1,5 +1,6 @@
 const db = require("./");
 const format = require("pg-format");
+const { createShopsRef, formatTreasureRef } = require("../utils/utils");
 
 const seed = ({ shopData, treasureData }) => {
   return db
@@ -20,9 +21,9 @@ const seed = ({ shopData, treasureData }) => {
         treasure_name VARCHAR NOT NULL,
         colour VARCHAR NOT NULL,
         age INT NOT NULL,
-        cost_at_auction FLOAT NOT NULL,
-        shop_id INT, FOREIGN KEY (shop_id) REFERENCES shops (shop_id)
-      )`);
+        cost_at_auction DECIMAL NOT NULL,
+        shop_id INT REFERENCES shops (shop_id)
+      );`);
     })
     .then(() => {
       const shopQuery = format(
@@ -34,6 +35,13 @@ const seed = ({ shopData, treasureData }) => {
     .then(() => {
       const treasureQuery = format(`INSERT INTO treasures (treasure_name, colour, age, cost_at_auction, shop_id) VALUES %L RETURNING *;`, treasureData.map((treasure) => [treasure.treasure_name, treasure.colour, treasure.age, treasure.cost_at_auction, treasure.shop_id]));
       return db.query(treasureQuery);
+    })
+    .then((result) => {
+      console.log(result.rows, 'result.rows');
+      const shopReference = createShopsRef(result.rows);
+      const formatTreasureData = formatTreasureRef(treasureData, shopReference);
+      console.log(shopReference, 'shopref');
+      console.log(formatTreasureData, 'format treasure data');
     })
 };
 
