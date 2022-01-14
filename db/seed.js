@@ -33,9 +33,7 @@ const seed = ({ shopData, treasureData }) => {
       return db.query(shopQuery);
     })
     .then((result) => {
-      console.log(result.rows);
       const shopReference = createShopsRef(result.rows);
-      console.log(shopReference, "shop ref");
       const formatTreasureData = formatTreasureRef(treasureData, shopReference);
 
       return formatTreasureData;

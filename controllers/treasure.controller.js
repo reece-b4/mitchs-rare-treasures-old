@@ -1,7 +1,10 @@
 const { fetchAllTreasures } = require("../models/model.js");
 
 exports.getTreasures = (req, res, next) => {
-  fetchAllTreasures()
+  const queries = {};
+  queries.criteria = req.query.sort_by || 'age';
+  queries.order = req.query.order || 'ASC';
+  fetchAllTreasures(queries)
     .then((Treasures) => {
       res.status(200).send({ Treasures });
     })
@@ -9,3 +12,4 @@ exports.getTreasures = (req, res, next) => {
       next(err);
     });
 };
+

@@ -29,4 +29,14 @@ describe("/api/treasures", () => {
         });
     });
   });
+  test('200: treasures are sorted by date order', () => {
+    return request(app)
+    .get('/api/treasures?order=desc')
+    .expect(200)
+    .then((res) => {
+      expect(res.body.treasures).toBeSortedBy('age');
+    })
+  });
 });
+
+
