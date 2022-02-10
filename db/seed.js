@@ -47,5 +47,5 @@ const seed = ({ shopData, treasureData }) => {
     })
     .then((result) => {});
 };
-
+// 
 module.exports = seed;
